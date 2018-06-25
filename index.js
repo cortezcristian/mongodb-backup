@@ -19,7 +19,7 @@ var BSON;
 var logger;
 var meta;
 
-var documentStore = undefined;
+var documentStore;
 
 var fileSystemDocumentStore = function(root) {
   var dbDir = root;
@@ -590,3 +590,4 @@ function backup(options) {
   return wrapper(my);
 }
 module.exports = backup;
+
