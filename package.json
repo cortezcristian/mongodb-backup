@@ -1,14 +1,14 @@
 {
   "version": "1.6.9",
   "name": "mongodb-backup",
-  "description": "backup for mongodb",
+  "description": "backup for mongodb (fork from https://github.com/hex7c0/mongodb-backup)",
   "keywords": [
     "mongodb",
     "backup",
     "dump"
   ],
   "preferGlobal": false,
-  "homepage": "https://github.com/hex7c0/mongodb-backup",
+  "homepage": "https://github.com/spmiller/mongodb-backup",
   "author": {
     "name": "hex7c0",
     "email": "hex7c0@gmail.com",
@@ -16,11 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hex7c0/mongodb-backup.git"
+    "url": "https://github.com/spmiller/mongodb-backup"
   },
   "bugs": {
-    "url": "https://github.com/hex7c0/mongodb-backup/issues",
-    "email": "hex7c0@gmail.com"
+    "url": "https://github.com/spmiller/mongodb-backup"
   },
   "main": "index.min.js",
   "dependencies": {
