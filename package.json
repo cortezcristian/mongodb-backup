@@ -1,6 +1,6 @@
 {
   "version": "1.6.9",
-  "name": "mongodb-backup-stream",
+  "name": "mongodb-backup-streaming",
   "description": "backup for mongodb (fork from https://github.com/hex7c0/mongodb-backup)",
   "keywords": [
     "mongodb",
