@@ -70,15 +70,15 @@ var fileSystemDocumentStore = function(root) {
   };
 };
 
-var streamingDocumentStore = function(root, stream) {
+var streamingDocumentStore = function(stream) {
   var tar = require('tar-stream');
   var pack = tar.pack(); // pack is a streams2 stream
   pack.pipe(stream);
 
-  var dbDir = root;
+  var dbDir = './';
   return {
     addDatabase: function addDatabase(dbName, next) {
-      dbDir = path.join(root, dbName);
+      dbDir = path.join('./', dbName);
       pack.entry({name: dbDir, type: 'directory'});
       next();
     },
@@ -583,12 +583,15 @@ function backup(options) {
   }
   if (my.stream) {
     my.tar = true; // override
-    documentStore = streamingDocumentStore(my.root, my.stream);
+    documentStore = streamingDocumentStore(my.stream);
   } else {
     documentStore = fileSystemDocumentStore(my.root);
   }
   return wrapper(my);
 }
 module.exports = backup;
+
+
+
 
 
