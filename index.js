@@ -78,20 +78,20 @@ var streamingDocumentStore = function(stream) {
   var dbDir = './';
   return {
     addDatabase: function addDatabase(dbName, next) {
-      dbDir = path.join('./', dbName);
+      dbDir = './' + dbName;
       pack.entry({name: dbDir, type: 'directory'});
       next();
     },
 
     addCollection: function addCollection(filename, next) {
       if (filename !== '') {
-        pack.entry({name: path.join(dbDir, filename), type: 'directory'});
+        pack.entry({name: [dbDir, filename].join('/'), type: 'directory'});
       }
       next();
     },
 
     store: function store(collectionName, filename, content, callback) {
-      pack.entry({name: path.join(dbDir, collectionName, filename)}, content);
+      pack.entry({name: [dbDir, collectionName, filename].join('/')}, content);
       if (callback) {
         callback();
       }
@@ -590,8 +590,3 @@ function backup(options) {
   return wrapper(my);
 }
 module.exports = backup;
-
-
-
-
-
