@@ -1,5 +1,5 @@
 {
-  "version": "1.6.9",
+  "version": "1.6.10",
   "name": "mongodb-backup-streaming",
   "description": "backup for mongodb (fork from https://github.com/hex7c0/mongodb-backup)",
   "keywords": [
