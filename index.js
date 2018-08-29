@@ -79,22 +79,15 @@ var streamingDocumentStore = function(stream) {
   return {
     addDatabase: function addDatabase(dbName, next) {
       dbDir = './' + dbName;
-      pack.entry({name: dbDir, type: 'directory'});
-      next();
+      pack.entry({name: dbDir, type: 'directory'}, next);
     },
 
-    addCollection: function addCollection(filename, next) {
-      if (filename !== '') {
-        pack.entry({name: [dbDir, filename].join('/'), type: 'directory'});
-      }
-      next();
+    addCollection: function addCollection(collectionName, next) {
+      pack.entry({name: [dbDir, collectionName].join('/'), type: 'directory'}, next);
     },
 
     store: function store(collectionName, filename, content, callback) {
-      pack.entry({name: [dbDir, collectionName, filename].join('/')}, content);
-      if (callback) {
-        callback();
-      }
+      pack.entry({name: [dbDir, collectionName, filename].join('/')}, content, callback);
     },
     close: function close() {
       pack.finalize();
