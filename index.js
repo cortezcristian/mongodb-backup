@@ -86,8 +86,8 @@ var streamingDocumentStore = function(stream) {
       pack.entry({name: [dbDir, collectionName].join('/'), type: 'directory'}, next);
     },
 
-    store: function store(collectionName, filename, content, callback) {
-      pack.entry({name: [dbDir, collectionName, filename].join('/')}, content, callback);
+    store: function store(collectionName, filename, content, next) {
+      pack.entry({name: [dbDir, collectionName, filename].join('/')}, content, next);
     },
     close: function close() {
       pack.finalize();
@@ -137,10 +137,11 @@ function writeMetadata(collection, metadata, next) {
  * @function toJson
  * @param {Objecy} doc - document from stream
  * @param {String} collectionPath - path of collection
+ * @param {function} next - the callback function of async
  */
-function toJsonAsync(doc, collectionPath) {
+function toJsonAsync(doc, collectionPath, next) {
 
-  documentStore.store(collectionPath, doc._id + '.json', JSON.stringify(doc));
+  documentStore.store(collectionPath, doc._id + '.json', JSON.stringify(doc), next);
 }
 
 /**
@@ -149,10 +150,11 @@ function toJsonAsync(doc, collectionPath) {
  * @function toBson
  * @param {Objecy} doc - document from stream
  * @param {String} collectionPath - path of collection
+ * @param {function} next - the callback function of async
  */
-function toBsonAsync(doc, collectionPath) {
+function toBsonAsync(doc, collectionPath, next) {
 
-  documentStore.store(collectionPath, doc._id + '.bson', BSON.serialize(doc));
+  documentStore.store(collectionPath, doc._id + '.bson', BSON.serialize(doc), next);
 }
 
 /**
@@ -196,12 +198,28 @@ function allCollections(db, name, query, metadata, parser, next) {
 
           var stream = collection.find(query).snapshot(true).stream();
 
+          var isStreamEnd = false;
+          var docReadCount = 0;
+          var docWrittenCount = 0;
+
+          function checkFinished() {
+            // let's ensure we got all documents written finished
+            if (isStreamEnd && docReadCount === docWrittenCount) {
+              return last === ++index ? next(null) : null;
+            }
+          }
+
           stream.once('end', function() {
 
-            return last === ++index ? next(null) : null;
+            isStreamEnd = true;
+            checkFinished();
           }).on('data', function(doc) {
 
-            parser(doc, collection.collectionName);
+            ++docReadCount;
+            parser(doc, collection.collectionName, function() {
+              ++docWrittenCount;
+              checkFinished();
+            });
           });
         });
       });
@@ -262,16 +280,28 @@ function allCollectionsScan(db, name, numCursors, metadata, parser, next) {
               return last === ++index ? next(null) : null;
             }
 
+            var docReadCount = 0;
+            var docWrittenCount = 0;
+
+            function checkFinished() {
+              // No more cursors let's ensure we got all documents written finished
+              if (cursorsDone <= 0 && docReadCount === docWrittenCount) {
+                return last === ++index ? next(null) : null;
+              }
+            }
+
             for (var i = 0; i < ii; ++i) {
               cursors[i].once('end', function() {
+                --cursorsDone;
+                checkFinished();
 
-                // No more cursors let's ensure we got all results
-                if (--cursorsDone === 0) {
-                  return last === ++index ? next(null) : null;
-                }
               }).on('data', function(doc) {
 
-                parser(doc, collection.collectionName);
+                ++docReadCount;
+                parser(doc, collection.collectionName, function() {
+                  ++docWrittenCount;
+                  checkFinished();
+                });
               });
             }
           });
@@ -321,12 +351,27 @@ function someCollections(db, name, query, metadata, parser, next, collections) {
 
           var stream = collection.find(query).snapshot(true).stream();
 
+          var isStreamEnd = false;
+          var docReadCount = 0;
+          var docWrittenCount = 0;
+
+          function checkFinished() {
+            // let's ensure we got all documents written finished
+            if (isStreamEnd && docReadCount === docWrittenCount) {
+              return last === ++index ? next(null) : null;
+            }
+          }
+
           stream.once('end', function() {
+            isStreamEnd = true;
+            checkFinished();
 
-            return last === ++index ? next(null) : null;
           }).on('data', function(doc) {
-
-            parser(doc, collection.collectionName);
+            ++docReadCount;
+            parser(doc, collection.collectionName, function() {
+              ++docWrittenCount;
+              checkFinished();
+            });
           });
         });
       });
@@ -387,16 +432,27 @@ function someCollectionsScan(db, name, numCursors, metadata, parser, next,
               return last === ++index ? next(null) : null;
             }
 
+            var docReadCount = 0;
+            var docWrittenCount = 0;
+
+            function checkFinished() {
+              // No more cursors let's ensure we got all documents written finished
+              if (cursorsDone <= 0 && docReadCount === docWrittenCount) {
+                return last === ++index ? next(null) : null;
+              }
+            }
+
             for (var i = 0; i < ii; ++i) {
               cursors[i].once('end', function() {
+                --cursorsDone;
+                checkFinished();
 
-                // No more cursors let's ensure we got all results
-                if (--cursorsDone === 0) {
-                  return last === ++index ? next(null) : null;
-                }
               }).on('data', function(doc) {
-
-                parser(doc, collection.collectionName);
+                ++docReadCount;
+                parser(doc, collection.collectionName, function() {
+                  ++docWrittenCount;
+                  checkFinished();
+                });
               });
             }
           });
