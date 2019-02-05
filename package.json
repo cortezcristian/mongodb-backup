@@ -1,6 +1,6 @@
 {
   "version": "1.6.9",
-  "name": "mongodb-backup",
+  "name": "mongodb-backup-stream-4x",
   "description": "backup for mongodb",
   "keywords": [
     "mongodb",
@@ -19,8 +19,7 @@
     "url": "https://github.com/hex7c0/mongodb-backup.git"
   },
   "bugs": {
-    "url": "https://github.com/hex7c0/mongodb-backup/issues",
-    "email": "hex7c0@gmail.com"
+    "url": "https://github.com/cortezcristian/mongodb-backup"
   },
   "main": "index.min.js",
   "dependencies": {
