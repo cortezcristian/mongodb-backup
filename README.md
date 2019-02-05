@@ -8,7 +8,7 @@
 
 This is a fork of a fork.
 
-This is a for of [PR #22](https://github.com/hex7c0/mongodb-backup/pull/22) with [PR #5](https://github.com/spmiller/mongodb-backup/pull/5) merged.
+This is a fork of [PR #22](https://github.com/hex7c0/mongodb-backup/pull/22) with [PR #5](https://github.com/spmiller/mongodb-backup/pull/5) merged.
 
 
 Which is a fork of [hex7c0's mongodb-backup](https://github.com/hex7c0/mongodb-backup) with [PR #22](https://github.com/hex7c0/mongodb-backup/pull/22) merged.

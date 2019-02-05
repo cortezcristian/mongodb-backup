@@ -1,5 +1,5 @@
 {
-  "version": "1.6.9-beta",
+  "version": "1.6.9-mongo4.x",
   "name": "mongodb-backup-stream-4x",
   "description": "backup for mongodb",
   "keywords": [
