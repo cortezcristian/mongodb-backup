@@ -349,7 +349,10 @@ function someCollections(db, name, query, metadata, parser, next, collections) {
 
         meta(collection, metadata, function() {
 
-          var stream = collection.find(query).snapshot(true).stream();
+          var stream = collection.find(query)
+            // .snapshot(true)
+            // http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html#snapshot
+            .stream();
 
           var isStreamEnd = false;
           var docReadCount = 0;
@@ -553,14 +556,13 @@ function wrapper(my) {
     }
   }
 
-  require('mongodb').MongoClient.connect(my.uri, my.options, function(err, db) {
+  require('mongodb').MongoClient.connect(my.uri, my.options).then(function(database) {
+    const databaseName = database.s.options.dbName;
+    let db = database.db(database.s.options.dbName);
 
     logger('db open');
-    if (err) {
-      return callback(err);
-    }
 
-    documentStore.addDatabase(db.databaseName, function(err, name) {
+    documentStore.addDatabase(databaseName, function(err, name) {
 
       function go() {
 
@@ -569,7 +571,7 @@ function wrapper(my) {
           function(err) {
 
             logger('db close');
-            db.close();
+            database.close();
             if (err) {
               return callback(err);
             }
@@ -579,16 +581,14 @@ function wrapper(my) {
           }, my.collections);
       }
 
-      if (err) {
-        return callback(err);
-      }
-
       if (my.metadata === false) {
         go();
       } else {
         documentStore.addCollection('.metadata', go);
       }
     });
+  }).catch((err) => {
+    return callback(err);
   });
 }
 
