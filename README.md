@@ -6,57 +6,11 @@
 [![Dependency Status](https://img.shields.io/david/hex7c0/mongodb-backup.svg)](https://david-dm.org/hex7c0/mongodb-backup)
 [![Coveralls](https://img.shields.io/coveralls/hex7c0/mongodb-backup.svg)](https://coveralls.io/r/hex7c0/mongodb-backup)
 
-Backup for mongodb
+This is a fork of a fork.
 
-Look at [`mongodb-backup-cli`](https://github.com/hex7c0/mongodb-backup-cli) for command line usage, similar to [mongodump](http://docs.mongodb.org/manual/reference/program/mongodump/)
+This is a for of [PR #22](https://github.com/hex7c0/mongodb-backup/pull/22) with [PR #5](https://github.com/spmiller/mongodb-backup/pull/5) merged.
 
-Look at [`mongodb-restore`](https://github.com/hex7c0/mongodb-restore) for restore data
 
-## Installation
+Which is a fork of [hex7c0's mongodb-backup](https://github.com/hex7c0/mongodb-backup) with [PR #22](https://github.com/hex7c0/mongodb-backup/pull/22) merged.
 
-Install through NPM
-
-```bash
-npm install mongodb-backup
-```
-or
-```bash
-git clone git://github.com/hex7c0/mongodb-backup.git
-```
-
-Bson@0.4.11 has been pulled out, so versions >= `1.3.0` and <= `1.4.1` are deprecated
-
-## API
-
-inside nodejs project
-```js
-var backup = require('mongodb-backup');
-
-backup({
-  uri: 'uri', // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-  root: __dirname
-});
-```
-
-### backup(options)
-
-#### options
-
- - `uri` - **String** [URI](http://mongodb.github.io/node-mongodb-native/2.0/tutorials/urls/) for MongoDb connection *(default "required")*
- - `root`- **String** Path where save data *(default "required")*
- - `[parser]` - **String | Function** Data parser (bson, json) or custom *(default "bson")*
- - `[collections]` - **Array** Select which collections save *(default "disabled")*
- - `[callback]` - **Function** Callback when done *(default "disabled")*
- - `[stream]`- **Object** Send `.tar` file to Node stream *(default "disabled")*
- - `[tar]` - **String** Pack files into a .tar file *(default "disabled")*
- - `[query]` - **Object** Query that optionally limits the documents included *(default "{}")*
- - `[numCursors]` - **Number** Set number of cursor for [parallelCollectionScan](https://docs.mongodb.org/v3.0/reference/command/parallelCollectionScan) without query *(default "disabled")*
- - `[logger]` - **String** Path where save a .log file *(default "disabled")*
- - `[metadata]` - **Boolean** Save metadata of collections as Index, ecc *(default "false")*
- - `[options]` - **Object** MongoDb [options](http://mongodb.github.io/node-mongodb-native/2.0/tutorials/connecting/#toc_7) *(default)*
-
-## Examples
-
-Take a look at my [examples](https://github.com/hex7c0/mongodb-backup/tree/1.6/examples)
-
-### [License Apache2](https://github.com/hex7c0/mongodb-backup/blob/1.6/LICENSE)
+Please see the original project for usage instructions.
